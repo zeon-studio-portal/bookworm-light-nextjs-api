@@ -6,6 +6,19 @@ import Link from "next/link";
 const Categories = async () => {
   const { data: categories } = await getCategories();
 
+  if (!categories || categories.length === 0) {
+    return (
+      <>
+        <SeoMeta title={"Categories"} />
+        <section className="section min-h-dvh">
+          <div className="container text-center">
+            {markdownify("No categories found", "h1", "h2 mb-16")}
+          </div>
+        </section>
+      </>
+    );
+  }
+
   return (
     <>
       <SeoMeta title="Categories" />

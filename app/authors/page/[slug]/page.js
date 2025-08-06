@@ -9,10 +9,26 @@ const { pagination } = config.settings;
 
 const AuthorPagination = async ({ params }) => {
   const currentPage = parseInt((params && params.slug) || 1);
+
+  // Fetch authors with pagination
   const { data: authors, meta } = await getAuthors({
     limit: pagination,
     page: currentPage,
   });
+
+  if (!authors || authors.length === 0) {
+    return (
+      <>
+        <SeoMeta title={"Authors"} />
+        <div className="section">
+          <div className="container text-center">
+            <h1 className="h2 mb-16">No authors found</h1>
+          </div>
+        </div>
+      </>
+    );
+  }
+
   const totalAuthors = meta?.total || 0;
   const authorIndex = await getListPage("content/authors/_index.md");
   const title = authorIndex?.frontmatter?.title || "Authors";

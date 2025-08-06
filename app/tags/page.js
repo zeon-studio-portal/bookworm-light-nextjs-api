@@ -6,6 +6,19 @@ import Link from "next/link";
 const Tags = async () => {
   const { data: tags } = await getTags();
 
+  if (!tags || tags.length === 0) {
+    return (
+      <>
+        <SeoMeta title={"Tags"} />
+        <section className="section min-h-dvh">
+          <div className="container text-center">
+            {markdownify("No tags found", "h1", "h2 mb-16")}
+          </div>
+        </section>
+      </>
+    );
+  }
+
   return (
     <>
       <SeoMeta title={"Tags"} />

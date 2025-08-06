@@ -1,9 +1,6 @@
 import { getPostsByCategory } from "@/actions/post/getPostByCategory";
-import config from "@config/config.json";
 import Posts from "@layouts/partials/Posts";
 import SeoMeta from "@layouts/partials/SeoMeta";
-import { getTaxonomy } from "@lib/taxonomyParser";
-const { blog_folder } = config.settings;
 
 // category page
 const Category = async ({ params }) => {
@@ -29,14 +26,3 @@ const Category = async ({ params }) => {
 };
 
 export default Category;
-
-// category page routes
-export async function generateStaticParams() {
-  const allCategories = getTaxonomy(`content/${blog_folder}`, "categories");
-
-  const paths = allCategories.map((category) => ({
-    category: category,
-  }));
-
-  return paths;
-}

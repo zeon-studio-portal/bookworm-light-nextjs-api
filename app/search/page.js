@@ -1,10 +1,9 @@
 import SearchResults from "@layouts/partials/SearchResults";
-import { getSinglePage } from "@lib/contentParser";
 import { Suspense } from "react";
 
-const SearchPage = async () => {
-  const authors = await getSinglePage("content/authors");
-
+const SearchPage = async ({ searchParams }) => {
+  const { key } = await searchParams;
+  const query = key || "";
   return (
     <>
       <div className="section">
@@ -16,7 +15,7 @@ const SearchPage = async () => {
               </h1>
             }
           >
-            <SearchResults authors={authors} />
+            <SearchResults query={query} />
           </Suspense>
         </div>
       </div>

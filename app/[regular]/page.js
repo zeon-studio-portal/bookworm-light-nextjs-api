@@ -8,7 +8,7 @@ import { getRegularPage, getSinglePage } from "@lib/contentParser";
 // for all regular pages
 const RegularPages = async ({ params }) => {
   // SERVER SIDE RENDERING
-  const { regular: slug } = params;
+  const { regular: slug } = await params;
   const pageData = await getRegularPage(slug);
   // get posts folder slug for filtering
 

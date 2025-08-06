@@ -1,3 +1,4 @@
+const { PRIMARY_COLOR } = require("./lib/constant");
 const theme = require("./config/theme.json");
 
 let font_base = Number(theme.fonts.font_size.base.replace("px", ""));
@@ -46,7 +47,7 @@ module.exports = {
         text: theme.colors.default.text_color.default,
         light: theme.colors.default.text_color.light,
         dark: theme.colors.default.text_color.dark,
-        primary: theme.colors.default.theme_color.primary,
+        primary: PRIMARY_COLOR,
         secondary: theme.colors.default.theme_color.secondary,
         body: theme.colors.default.theme_color.body,
         border: theme.colors.default.theme_color.border,

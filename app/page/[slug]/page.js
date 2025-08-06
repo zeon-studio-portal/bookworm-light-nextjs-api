@@ -1,27 +1,39 @@
+import { getPosts } from "@/actions/post/getPosts";
 import Pagination from "@components/Pagination";
 import config from "@config/config.json";
 import SeoMeta from "@layouts/partials/SeoMeta";
-import { getSinglePage } from "@lib/contentParser";
 import Posts from "@partials/Posts";
-const { blog_folder } = config.settings;
+import { notFound } from "next/navigation";
 
 // blog pagination
 const BlogPagination = async ({ params }) => {
-  const currentPage = parseInt((params && params.slug) || 1);
+  const { slug } = await params;
+  const currentPage = parseInt(slug) || 1;
   const { pagination } = config.settings;
-  const posts = await getSinglePage(`content/${blog_folder}`);
-  const authors = await getSinglePage("content/authors");
-  const indexOfLastPost = currentPage * pagination;
-  const indexOfFirstPost = indexOfLastPost - pagination;
-  const totalPages = Math.ceil(posts.length / pagination);
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  const {
+    data: posts,
+    isError,
+    meta,
+  } = await getPosts({
+    page: currentPage,
+    limit: config.settings.pagination,
+    sortBy: "createdAt",
+    sortOrder: "desc",
+  });
+
+  if (isError) {
+    notFound();
+  }
+
+  const totalPages = Math.ceil(meta.total / pagination);
+  const currentPosts = posts;
 
   return (
     <>
       <SeoMeta title="Blog Pagination" />
       <section className="section">
         <div className="container">
-          <Posts className="mb-16" posts={currentPosts} authors={authors} />
+          <Posts className="mb-16" posts={currentPosts} authors={[]} />
           <Pagination totalPages={totalPages} currentPage={currentPage} />
         </div>
       </section>
@@ -30,20 +42,3 @@ const BlogPagination = async ({ params }) => {
 };
 
 export default BlogPagination;
-
-// get blog pagination slug
-export async function generateStaticParams() {
-  const getAllSlug = await getSinglePage(`content/${blog_folder}`);
-  const allSlug = getAllSlug.map((item) => item.slug);
-  const { pagination } = config.settings;
-  const totalPages = Math.ceil(allSlug.length / pagination);
-  let paths = [];
-
-  for (let i = 1; i < totalPages; i++) {
-    paths.push({
-      slug: (i + 1).toString(),
-    });
-  }
-
-  return paths;
-}

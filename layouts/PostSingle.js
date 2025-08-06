@@ -1,17 +1,14 @@
 import Share from "@components/Share";
+import { getImageUrl } from "@lib/getImageUrl";
 import dateFormat from "@lib/utils/dateFormat";
-import similerItems from "@lib/utils/similarItems";
 import { humanize, markdownify, slugify } from "@lib/utils/textConverter";
-import SimilarPosts from "@partials/SimilarPosts";
 import Image from "next/image";
 import Link from "next/link";
 import MDXContent from "./partials/MDXContent";
 
-const PostSingle = ({ post, posts, authors, slug }) => {
-  const { frontmatter, content } = post;
-  let { description, title, date, image, categories, tags } = frontmatter;
+const PostSingle = ({ post, authors, slug }) => {
+  let { description, title, date, image, categories, tags, content } = post;
   description = description ? description : content.slice(0, 120);
-  const similarPosts = similerItems(post, posts, slug);
 
   return (
     <>
@@ -23,26 +20,26 @@ const PostSingle = ({ post, posts, authors, slug }) => {
               <li>
                 {authors
                   .filter((author) =>
-                    frontmatter.authors
+                    authors
                       .map((author) => slugify(author))
-                      .includes(slugify(author.frontmatter.title))
+                      .includes(slugify(author.title)),
                   )
                   .map((author, i) => (
                     <Link
-                      href={`/authors/${slugify(author.frontmatter.title)}`}
+                      href={`/authors/${slugify(author.title)}`}
                       key={`author-${i}`}
                       className="flex items-center hover:text-primary"
                     >
                       {author.frontmatter.image && (
                         <Image
-                          src={author.frontmatter.image}
-                          alt={author.frontmatter.title}
+                          src={getImageUrl(author.image)}
+                          alt={author.title}
                           height={50}
                           width={50}
                           className="mr-2 h-6 w-6 rounded-full"
                         />
                       )}
-                      <span>{author.frontmatter.title}</span>
+                      <span>{author.title}</span>
                     </Link>
                   ))}
               </li>
@@ -64,7 +61,7 @@ const PostSingle = ({ post, posts, authors, slug }) => {
             </ul>
             {image && (
               <Image
-                src={image}
+                src={getImageUrl(image)}
                 height={500}
                 width={1000}
                 alt={title}
@@ -97,14 +94,6 @@ const PostSingle = ({ post, posts, authors, slug }) => {
           </article>
         </div>
       </section>
-      {similarPosts && similarPosts.length > 0 && (
-        <section className="section">
-          <div className="container">
-            <h2 className="mb-8 text-center">Similar Posts</h2>
-            <SimilarPosts posts={similarPosts.slice(0, 3)} />
-          </div>
-        </section>
-      )}
     </>
   );
 };

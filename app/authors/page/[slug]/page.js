@@ -1,25 +1,21 @@
-import Pagination from "@components/Pagination";
+import { getAuthors } from "@/actions/post/author/getAuthors";
 import config from "@config/config.json";
+import Pagination from "@layouts/components/Pagination";
+import Authors from "@layouts/partials/Authors";
 import SeoMeta from "@layouts/partials/SeoMeta";
-import { getListPage, getSinglePage } from "@lib/contentParser";
+import { getListPage } from "@lib/contentParser";
 import { markdownify } from "@lib/utils/textConverter";
-import Authors from "@partials/Authors";
+const { pagination } = config.settings;
 
-// blog pagination
 const AuthorPagination = async ({ params }) => {
-  //
   const currentPage = parseInt((params && params.slug) || 1);
-  const { pagination } = config.settings;
-  const authors = getSinglePage("content/authors");
+  const { data: authors, meta } = await getAuthors({
+    limit: pagination,
+    page: currentPage,
+  });
+  const totalAuthors = meta?.total || 0;
   const authorIndex = await getListPage("content/authors/_index.md");
-
-  //
-  const indexOfLastAuthor = currentPage * pagination;
-  const indexOfFirstAuthor = indexOfLastAuthor - pagination;
-  const totalPages = Math.ceil(authors.length / pagination);
-  const currentAuthors = authors.slice(indexOfFirstAuthor, indexOfLastAuthor);
-  const { frontmatter, content } = authorIndex;
-  const { title } = frontmatter;
+  const title = authorIndex?.frontmatter?.title || "Authors";
 
   return (
     <>
@@ -27,10 +23,10 @@ const AuthorPagination = async ({ params }) => {
       <section className="section">
         <div className="container text-center">
           {markdownify(title, "h1", "h2 mb-16")}
-          <Authors authors={currentAuthors} />
+          <Authors authors={authors} />
           <Pagination
             section="authors"
-            totalPages={totalPages}
+            totalPages={Math.ceil(totalAuthors / pagination)}
             currentPage={currentPage}
           />
         </div>
@@ -40,20 +36,3 @@ const AuthorPagination = async ({ params }) => {
 };
 
 export default AuthorPagination;
-
-// get authors pagination slug
-export const generateStaticParams = () => {
-  const getAllSlug = getSinglePage("content/authors");
-  const allSlug = getAllSlug.map((item) => item.slug);
-  const { pagination } = config.settings;
-  const totalPages = Math.ceil(allSlug.length / pagination);
-  let paths = [];
-
-  for (let i = 1; i < totalPages; i++) {
-    paths.push({
-      slug: (i + 1).toString(),
-    });
-  }
-
-  return paths;
-};

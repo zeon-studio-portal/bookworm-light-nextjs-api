@@ -47,7 +47,7 @@ module.exports = {
         text: theme.colors.default.text_color.default,
         light: theme.colors.default.text_color.light,
         dark: theme.colors.default.text_color.dark,
-        primary: PRIMARY_COLOR,
+        primary: PRIMARY_COLOR || theme.colors.default.theme_color.primary,
         secondary: theme.colors.default.theme_color.secondary,
         body: theme.colors.default.theme_color.body,
         border: theme.colors.default.theme_color.border,

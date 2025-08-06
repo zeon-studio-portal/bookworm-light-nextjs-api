@@ -33,7 +33,7 @@ const BlogPagination = async ({ params }) => {
       <SeoMeta title="Blog Pagination" />
       <section className="section">
         <div className="container">
-          <Posts className="mb-16" posts={currentPosts} authors={[]} />
+          <Posts className="mb-16" posts={currentPosts} />
           <Pagination totalPages={totalPages} currentPage={currentPage} />
         </div>
       </section>

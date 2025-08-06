@@ -8,9 +8,11 @@ export const dynamicParams = false;
 export default async function Post({ params }) {
   const { slug } = await params;
   const { data: post } = await getPost(slug);
-  if (!post) {
+
+  if (!post || post.status !== "published") {
     notFound();
   }
+
   const { data: authors } = await getAuthors();
   return <PostSingle slug={slug} post={post} authors={authors} />;
 }

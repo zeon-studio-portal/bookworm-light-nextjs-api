@@ -12,6 +12,11 @@ const Posts = ({ posts, className }) => {
     <div className={`row space-y-16 ${className}`}>
       {posts.map((post, i) => {
         const author = post.author;
+
+        if (post.status !== "published") {
+          return null; // Skip unpublished posts
+        }
+
         return (
           <div
             key={`key-${i}`}
@@ -28,24 +33,26 @@ const Posts = ({ posts, className }) => {
               />
             )}
             <ul className="mb-4 mt-4 flex flex-wrap items-center space-x-3 text-text">
-              <li>
-                <Link
-                  href={`/authors/${slugify(author.name ?? "")}`}
-                  key={`author-${i}`}
-                  className="flex items-center hover:text-primary"
-                >
-                  {author.image && (
-                    <Image
-                      src={getImageUrl(author.image)}
-                      alt={author.name}
-                      height={50}
-                      width={50}
-                      className="mr-2 h-6 w-6 rounded-full"
-                    />
-                  )}
-                  <span className="block">{author.name}</span>
-                </Link>
-              </li>
+              {author.name && (
+                <li>
+                  <Link
+                    href={`/authors/${slugify(author.name ?? "")}`}
+                    key={`author-${i}`}
+                    className="flex items-center hover:text-primary"
+                  >
+                    {author.image && (
+                      <Image
+                        src={getImageUrl(author.image)}
+                        alt={author.name}
+                        height={50}
+                        width={50}
+                        className="mr-2 h-6 w-6 rounded-full"
+                      />
+                    )}
+                    <span className="block">{author.name}</span>
+                  </Link>
+                </li>
+              )}
               <li>{dateFormat(post.date)}</li>
               <li>
                 <ul>
@@ -71,7 +78,9 @@ const Posts = ({ posts, className }) => {
               </Link>
             </h3>
             <p className="text-text">
-              {post.content && post.content.slice(0, Number(summary_length))}...
+              {post.description &&
+                post.description.slice(0, Number(summary_length))}
+              ...
             </p>
           </div>
         );

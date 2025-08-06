@@ -5,6 +5,7 @@ import { humanize, markdownify, slugify } from "@lib/utils/textConverter";
 import Image from "next/image";
 import Link from "next/link";
 import MDXContent from "./partials/MDXContent";
+import SimilarPosts from "./partials/SimilarPosts";
 
 const PostSingle = ({ post, authors, slug }) => {
   let { description, title, date, image, categories, tags, content } = post;
@@ -92,6 +93,13 @@ const PostSingle = ({ post, authors, slug }) => {
               />
             </div>
           </article>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <h2 className="mb-8 text-center">Similar Posts</h2>
+          <SimilarPosts postId={post.post_id} />
         </div>
       </section>
     </>

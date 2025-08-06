@@ -1,16 +1,16 @@
-import config from "@config/config.json";
 import theme from "@config/theme.json";
 import TwSizeIndicator from "@layouts/components/TwSizeIndicator";
 import Footer from "@layouts/partials/Footer";
 import Header from "@layouts/partials/Header";
 import Providers from "@layouts/partials/Providers";
-import { PRIMARY_COLOR } from "@lib/constant";
+import { FAVICON, PRIMARY_COLOR } from "@lib/constant";
 import "../styles/style.scss";
 
 export default function RootLayout({ children }) {
   const pf = theme.fonts.font_family.primary;
   const sf = theme.fonts.font_family.secondary;
   const primaryColor = PRIMARY_COLOR;
+
   return (
     <html suppressHydrationWarning={true} lang="en">
       <head>
@@ -21,7 +21,7 @@ export default function RootLayout({ children }) {
         />
 
         {/* favicon */}
-        <link rel="shortcut icon" href={config.site.favicon} />
+        <link rel="shortcut icon" href={FAVICON} />
         {/* theme meta */}
         <meta name="theme-name" content="andromeda-light-nextjs" />
 

@@ -1,26 +1,18 @@
+import { getAuthorById } from "@/actions/post/author/getAuthorbyId";
 import AuthorSingle from "@layouts/AuthorSingle";
-import { getSinglePage } from "@lib/contentParser";
+import { notFound } from "next/navigation";
 
-// post single layout
 const Article = async ({ params }) => {
-  //
-  const { single } = params;
-  const getAuthors = getSinglePage("content/authors");
-  const author = getAuthors.filter((author) => author.slug == single);
-  //
-  const { frontmatter, content } = author[0];
+  const { single } = await params;
+  // Fetch the author data by ID
+  const { data: author, message } = await getAuthorById(single);
 
-  return <AuthorSingle frontmatter={frontmatter} content={content} />;
-};
+  // If no author is found, return a 404 page
+  if (!author) {
+    notFound();
+  }
 
-// get authors single slug
-export const generateStaticParams = () => {
-  const allSlug = getSinglePage("content/authors");
-  const paths = allSlug.map((item) => ({
-    single: item.slug,
-  }));
-
-  return paths;
+  return <AuthorSingle author={author} />;
 };
 
 export default Article;

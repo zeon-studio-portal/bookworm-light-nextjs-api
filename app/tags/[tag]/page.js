@@ -1,19 +1,15 @@
+import { getPostsByTag } from "@/actions/post/getPostByTag";
 import config from "@config/config.json";
+import Posts from "@layouts/partials/Posts";
 import SeoMeta from "@layouts/partials/SeoMeta";
-import { getSinglePage } from "@lib/contentParser";
-import { getTaxonomy } from "@lib/taxonomyParser";
-import { slugify } from "@lib/utils/textConverter";
-import Posts from "@partials/Posts";
 const { blog_folder } = config.settings;
 
 // tag page
-const Tag = ({ params }) => {
-  const tag = params.tag;
-  const posts = getSinglePage(`content/${blog_folder}`);
-  const filterPosts = posts.filter((post) =>
-    post.frontmatter.tags.find((tag) => slugify(tag).includes(params.tag))
-  );
-  const authors = getSinglePage("content/authors");
+const Tag = async ({ params }) => {
+  const { tag } = await params;
+
+  // Fetch posts by tag
+  const { data: blogs } = await getPostsByTag(tag);
 
   return (
     <>
@@ -23,7 +19,7 @@ const Tag = ({ params }) => {
           <h1 className="h2 mb-8 text-center">
             Showing posts from <span className="text-primary">{tag}</span> tag
           </h1>
-          <Posts posts={filterPosts} authors={authors} />
+          <Posts posts={blogs} />
         </div>
       </div>
     </>
@@ -31,14 +27,3 @@ const Tag = ({ params }) => {
 };
 
 export default Tag;
-
-// tag page routes
-export const generateStaticParams = () => {
-  const allCategories = getTaxonomy(`content/${blog_folder}`, "tags");
-
-  const paths = allCategories.map((tag) => ({
-    tag: tag,
-  }));
-
-  return paths;
-};

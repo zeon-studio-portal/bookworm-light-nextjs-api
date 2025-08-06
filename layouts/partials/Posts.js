@@ -7,6 +7,7 @@ import Link from "next/link";
 
 const Posts = ({ posts, className }) => {
   const { summary_length } = config.settings;
+
   return (
     <div className={`row space-y-16 ${className}`}>
       {posts.map((post, i) => {

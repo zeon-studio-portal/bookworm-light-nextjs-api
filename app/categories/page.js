@@ -1,26 +1,25 @@
-import config from "@config/config.json";
+import { getCategories } from "@/actions/category/getCategories";
 import SeoMeta from "@layouts/partials/SeoMeta";
-import { getTaxonomy } from "@lib/taxonomyParser";
 import { humanize, markdownify } from "@lib/utils/textConverter";
 import Link from "next/link";
-const { blog_folder } = config.settings;
 
 const Categories = async () => {
-  const categories = await getTaxonomy(`content/${blog_folder}`, "categories");
+  const { data: categories } = await getCategories();
+
   return (
     <>
       <SeoMeta title="Categories" />
       <section className="section min-h-dvh">
         <div className="container text-center">
           {markdownify("Categories", "h1", "h2 mb-16")}
-          <ul className="space-x-4">
+          <ul className="flex flex-wrap gap-4">
             {categories.map((category, i) => (
               <li key={`category-${i}`} className="inline-block">
                 <Link
-                  href={`/categories/${category}`}
-                  className="rounded-lg bg-theme-light px-4 py-2 text-dark transition hover:bg-primary hover:text-white"
+                  href={`/categories/${category.slug}`}
+                  className="block rounded-lg bg-theme-light px-4 py-2 text-dark transition hover:bg-primary hover:text-white"
                 >
-                  &#8226; {humanize(category)}
+                  &#8226; {humanize(category.name)}
                 </Link>
               </li>
             ))}

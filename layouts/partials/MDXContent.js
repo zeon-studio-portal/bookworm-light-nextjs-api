@@ -12,7 +12,6 @@ const MDXContent = ({ content }) => {
 
   return (
     <>
-      {/* @ts-ignore */}
       <MDXRemote
         source={content}
         components={shortcodes}

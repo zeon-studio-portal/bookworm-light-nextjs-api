@@ -1,23 +1,17 @@
+import { getPostsByCategory } from "@/actions/post/getPostByCategory";
 import config from "@config/config.json";
+import Posts from "@layouts/partials/Posts";
 import SeoMeta from "@layouts/partials/SeoMeta";
-import { getSinglePage } from "@lib/contentParser";
 import { getTaxonomy } from "@lib/taxonomyParser";
-import { slugify } from "@lib/utils/textConverter";
-import Posts from "@partials/Posts";
 const { blog_folder } = config.settings;
 
 // category page
-const Category = ({ params }) => {
-  const category = params.category;
-  // SERVER SIDE RENDERING
-  const posts = getSinglePage(`content/${blog_folder}`);
-  const filterPosts = posts.filter((post) =>
-    post.frontmatter.categories.find((category) =>
-      slugify(category).includes(params.category)
-    )
-  );
-  const authors = getSinglePage("content/authors");
-  //
+const Category = async ({ params }) => {
+  const { category } = await params;
+
+  // Fetching posts by category
+  const { data: blogs } = await getPostsByCategory(category);
+
   return (
     <>
       <SeoMeta title={category} />
@@ -27,7 +21,7 @@ const Category = ({ params }) => {
             Showing posts from <span className="text-primary">{category}</span>{" "}
             category
           </h1>
-          <Posts posts={filterPosts} authors={authors} />
+          <Posts posts={blogs} />
         </div>
       </div>
     </>

@@ -1,4 +1,4 @@
-import { getAuthors } from "@/actions/post/author/getAuthors";
+import { getAuthors } from "@/actions/author/getAuthors";
 import { getPost } from "@/actions/post/getPostBySlug";
 import PostSingle from "@layouts/PostSingle";
 import { notFound } from "next/navigation";

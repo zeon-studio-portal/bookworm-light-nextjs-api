@@ -1,12 +1,10 @@
-import config from "@config/config.json";
+import { getTags } from "@/actions/tags/getTags";
 import SeoMeta from "@layouts/partials/SeoMeta";
-import { getTaxonomy } from "@lib/taxonomyParser";
 import { humanize, markdownify } from "@lib/utils/textConverter";
 import Link from "next/link";
-const { blog_folder } = config.settings;
 
 const Tags = async () => {
-  const tags = await getTaxonomy(`content/${blog_folder}`, "tags");
+  const { data: tags } = await getTags();
 
   return (
     <>
@@ -14,14 +12,14 @@ const Tags = async () => {
       <section className="section min-h-dvh">
         <div className="container text-center">
           {markdownify("Tags", "h1", "h2 mb-16")}
-          <ul className="space-x-4">
-            {tags.map((category, i) => (
-              <li key={`category-${i}`} className="inline-block">
+          <ul className="flex flex-wrap gap-4">
+            {tags.map((tag, i) => (
+              <li key={`category-${i}`}>
                 <Link
-                  href={`/tags/${category}`}
-                  className="rounded-lg bg-theme-light px-4 py-2 text-dark transition hover:bg-primary hover:text-white"
+                  href={`/tags/${tag.slug}`}
+                  className="block rounded-lg bg-theme-light px-4 py-2 text-dark transition hover:bg-primary hover:text-white"
                 >
-                  &#8226; {humanize(category)}
+                  &#8226; {humanize(tag.name)}
                 </Link>
               </li>
             ))}

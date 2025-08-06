@@ -1,4 +1,4 @@
-import { getAuthors } from "@/actions/post/author/getAuthors";
+import { getAuthors } from "@/actions/author/getAuthors";
 import config from "@config/config.json";
 import Pagination from "@layouts/components/Pagination";
 import Authors from "@layouts/partials/Authors";

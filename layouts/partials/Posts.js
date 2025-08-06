@@ -5,12 +5,12 @@ import { humanize, slugify } from "@lib/utils/textConverter";
 import Image from "next/image";
 import Link from "next/link";
 
-const Posts = ({ posts, className, authors }) => {
+const Posts = ({ posts, className }) => {
   const { summary_length } = config.settings;
-
   return (
     <div className={`row space-y-16 ${className}`}>
       {posts.map((post, i) => {
+        const author = post.author;
         return (
           <div
             key={`key-${i}`}
@@ -28,30 +28,22 @@ const Posts = ({ posts, className, authors }) => {
             )}
             <ul className="mb-4 mt-4 flex flex-wrap items-center space-x-3 text-text">
               <li>
-                {authors
-                  .filter((author) =>
-                    post.frontmatter.authors
-                      .map((author) => slugify(author))
-                      .includes(slugify(author.frontmatter.title)),
-                  )
-                  .map((author, i) => (
-                    <Link
-                      href={`/authors/${slugify(author.frontmatter.title)}`}
-                      key={`author-${i}`}
-                      className="flex items-center hover:text-primary"
-                    >
-                      {author.frontmatter.image && (
-                        <Image
-                          src={author.frontmatter.image}
-                          alt={author.frontmatter.title}
-                          height={50}
-                          width={50}
-                          className="mr-2 h-6 w-6 rounded-full"
-                        />
-                      )}
-                      <span>{author.frontmatter.title}</span>
-                    </Link>
-                  ))}
+                <Link
+                  href={`/authors/${slugify(author.name ?? "")}`}
+                  key={`author-${i}`}
+                  className="flex items-center hover:text-primary"
+                >
+                  {author.image && (
+                    <Image
+                      src={getImageUrl(author.image)}
+                      alt={author.name}
+                      height={50}
+                      width={50}
+                      className="mr-2 h-6 w-6 rounded-full"
+                    />
+                  )}
+                  <span className="block">{author.name}</span>
+                </Link>
               </li>
               <li>{dateFormat(post.date)}</li>
               <li>

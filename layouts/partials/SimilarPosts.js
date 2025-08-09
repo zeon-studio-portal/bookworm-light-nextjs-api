@@ -43,7 +43,10 @@ const SimilarPosts = async ({ postId }) => {
             </li>
           </ul>
           <h3 className="h4">
-            <Link href={`/${post.slug}`} className="block hover:text-primary">
+            <Link
+              href={`/post/${post.slug}`}
+              className="block hover:text-primary"
+            >
               {post.title}
             </Link>
           </h3>

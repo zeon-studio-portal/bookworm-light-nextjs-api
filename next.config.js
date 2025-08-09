@@ -12,24 +12,6 @@ const nextConfig = {
         port: "",
         pathname: "/**",
       },
-      {
-        protocol: "https",
-        hostname: "open-hr.sgp1.cdn.digitaloceanspaces.composts",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "content-hub-backend.vercel.app",
-        port: "",
-        pathname: "/**",
-      },
-      {
-        protocol: "https",
-        hostname: "example.com",
-        port: "",
-        pathname: "/**",
-      },
     ],
   },
 };

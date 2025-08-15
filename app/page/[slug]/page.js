@@ -30,7 +30,7 @@ const BlogPagination = async ({ params }) => {
 
   return (
     <>
-      <SeoMeta title="Blog Pagination" />
+      <SeoMeta title={process.env.SITE_NAME} />
       <section className="section">
         <div className="container">
           <Posts className="mb-16" posts={currentPosts} />
